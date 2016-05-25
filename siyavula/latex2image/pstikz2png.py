@@ -382,8 +382,8 @@ def pspicture2png(iPspictureElement, *args, **kwargs):
 
 
 def equation2png(iPspictureElement, *args, **kwargs):
-    # check to see how many lines are in the code
-    iPspictureElement = iPspictureElement.replace(r'\[', '\(').replace(r'\]', '\)')
+    # assume that \[ \] only occurs at the start and end of the string
+    iPspictureElement = '\({}\)'.format(iPspictureElement[2:-2])
     iPspictureElement = iPspictureElement.replace(r'&', r' &')
     # Remove the next line when EdTech has removed all hex colour codes
     # This escapes the # in the colour code
