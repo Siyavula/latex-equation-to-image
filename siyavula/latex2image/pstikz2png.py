@@ -388,9 +388,6 @@ def equation2png(iPspictureElement, *args, **kwargs):
     # Remove the next line when EdTech has removed all hex colour codes
     # This escapes the # in the colour code
     iPspictureElement = iPspictureElement.replace(r'{#', r'{\#')
-    # remove the middot command
-    iPspictureElement = iPspictureElement.replace(r'\middot', r'\cdot')
-    iPspictureElement = iPspictureElement.replace(r'&#183;', r'\cdot')
     # remove tabs
     iPspictureElement = iPspictureElement.replace('\t', ' ')
     iPspictureElement = escape_percentage(iPspictureElement)
