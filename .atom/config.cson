@@ -1,0 +1,20 @@
+"*":
+  "autocomplete-python-jedi":
+    extraPaths: "$PROJECT/venv/lib/python2.7/site-packages"
+    pythonPaths: "$PROJECT/venv/bin/python"
+  core:
+    customFileTypes:
+      "text.html.jinja": [
+        "jinja2"
+      ]
+  "linter-eslint":
+    lintHtmlFiles: true
+  "linter-flake8":
+    executablePath: "$PROJECT/venv/bin/flake8"
+  "prettier-atom":
+    formatOnSaveOptions:
+      enabled: true
+      isDisabledIfNoConfigFile: true
+    prettierOptions:
+      bracketSpacing: false
+      singleQuote: true
