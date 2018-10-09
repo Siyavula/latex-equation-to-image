@@ -93,9 +93,11 @@ def latex2png(picture_element, preamble, return_eps=False, page_width_px=None,
     if not pdflatexpath:
         raise ValueError("pdflatexpath cannot be None")
 
-    errorLog, temp = execute([pdflatexpath,
-                              "-shell-escape", "-halt-on-error",
-                              "-output-directory", temp_dir, latex_path])
+    command = ["docker", "run", "--rm", "-v", "{}:/source".format(temp_dir), "-w",
+               "/source", "siyavula/latex2012-build", "pdflatex",
+               "-shell-escape", "-halt-on-error", "-output-directory", temp_dir, latex_path]
+
+    errorLog, temp = execute(command)
     try:
         open(pdf_path, "rb")
     except IOError:
@@ -231,8 +233,8 @@ def replace_latex_with_images(xml_dom, class_to_replace, cache_path, image_path)
         img.attrib['src'] = '{}/{}.png'.format(image_path, codehash_1x)
         img.attrib['srcset'] = '{}/{}.png 2x'.format(image_path, codehash_2x)
         if equation.tag == 'div' and not equation.xpath(
-                'ancestor::div[@class="response-query-body"]'):  
-            # images in the query must not be clickable 
+                'ancestor::div[@class="response-query-body"]'):
+            # images in the query must not be clickable
             isolated_image_path = '/practice/isolated_equation{}/{}.png'.format(
                 image_path, codehash_1x)
             a_tag = lxml.etree.SubElement(equation, 'a', {'href': isolated_image_path})
