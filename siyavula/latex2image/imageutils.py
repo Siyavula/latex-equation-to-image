@@ -93,9 +93,9 @@ def latex2png(picture_element, preamble, return_eps=False, page_width_px=None,
     if not pdflatexpath:
         raise ValueError("pdflatexpath cannot be None")
 
-    command = ["docker", "run", "--rm", "-v", "{}:/source".format(temp_dir), "-w",
-               "/source", "siyavula/latex2012-build", "pdflatex",
-               "-shell-escape", "-halt-on-error", "-output-directory", temp_dir, latex_path]
+    command = ["docker", "run", "--rm", "-v", "{}:/images".format(temp_dir),
+               "siyavula/latex2012-build", "pdflatex",
+               "-shell-escape", "-halt-on-error", 'figure.tex']
 
     errorLog, temp = execute(command)
     try:
@@ -106,9 +106,12 @@ def latex2png(picture_element, preamble, return_eps=False, page_width_px=None,
                 latex_path, preamble.replace('__CODE__', code.strip())))
 
     # crop the pdf image too
-    # execute(['pdfcrop', '--margins', '1', pdfPath, pdfPath])
+    # execute(["docker", "run", "--rm", "-v", "{}:/images".format(temp_dir),
+    #          "siyavula/latex2012-build", 'pdfcrop', '--margins', '1', pdf_path, pdf_path])
 
-    execute(['convert', '-density', '%i' % dpi, pdf_path, png_path])
+    execute(["docker", "run", "--rm", "-v", "{}:/images".format(temp_dir),
+             "siyavula/latex2012-build", 'convert',
+             '-density', '%i' % dpi, 'figure.pdf', 'figure.png'])
 
     return png_path
 
