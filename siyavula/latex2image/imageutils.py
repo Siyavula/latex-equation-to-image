@@ -93,6 +93,10 @@ def latex2png(picture_element, preamble, return_eps=False, page_width_px=None,
     if not pdflatexpath:
         raise ValueError("pdflatexpath cannot be None")
 
+    print('THIS COMMAND BELOW FAILS')
+    # OSError: [Errno 2] No such file or directory
+    # In the subprocess module
+
     errorLog, temp = execute([pdflatexpath,
                               "-shell-escape", "-halt-on-error",
                               "-output-directory", temp_dir, latex_path])
@@ -124,18 +128,22 @@ def cleanup_after_latex(figpath):
 def run_latex(pictype, codehash, codetext, cachepath, dpi=300, pdflatexpath=None):
     """Run the image generation for pstricks and tikz images."""
     # try and find pdflatex
-    if pdflatexpath is None:
-        path = os.environ.get('LATEX_PATH', os.environ.get('PATH'))
-        texpath = [p for p in path.split(':') if 'tex' in p]
-        if texpath:
-            pdflatexpath = texpath[0] + '/pdflatex'
-        else:
-            # no custom latex installed. Try /usr/local/bin and /usr/local
-            for path in ['/usr/local/bin/', '/usr/bin/']:
-                texpath = os.path.join(path, 'pdflatex')
-                if os.path.exists(texpath):
-                    pdflatexpath = texpath
-                    break
+    # if pdflatexpath is None:
+    #     path = os.environ.get('LATEX_PATH', os.environ.get('PATH'))
+    #     texpath = [p for p in path.split(':') if 'tex' in p]
+    #     if texpath:
+    #         pdflatexpath = texpath[0] + '/pdflatex'
+    #     else:
+    #         # no custom latex installed. Try /usr/local/bin and /usr/local
+    #         for path in ['/usr/local/bin/', '/usr/bin/']:
+    #             texpath = os.path.join(path, 'pdflatex')
+    #             if os.path.exists(texpath):
+    #                 pdflatexpath = texpath
+    #                 break
+
+    pdflatexpath = ' '.join([
+        'docker-compose', '-f', '/home/rich/Siyavula/siyavula.latex.docker/docker-compose.yaml',
+        'run', 'latex', 'latex'])
 
     # copy to local image cache in .bookbuilder/images
     image_cache_path = os.path.join(cachepath, codehash + '.png')
